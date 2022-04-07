@@ -4,7 +4,7 @@ import { createJob, deleteJob, getAllJobs, showStatus, updateJob } from '../cont
 const router = express.Router()
 
 router.route('/').get(getAllJobs).post(createJob)
-router.route('/status').get(showStatus)
+router.route('/stats').get(showStatus)
 router.route('/:id').patch(updateJob).delete(deleteJob)
 
 export default router
