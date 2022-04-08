@@ -6,7 +6,25 @@ import { BadRequestError, NotFoundError } from '../errors/index.js'
 import checkPermission from '../utils/checkPermissions.js'
 
 const getAllJobs = async (req, res) => {
-  const jobs = await Job.find({ createdBy: req.user.userId })
+  const { search, status, jobType, sort } = req.query
+  const queryObject = { createdBy: req.user.userId }
+
+  // Searching
+  if (status !== 'all') { queryObject.status = status }
+  if (jobType !== 'all') { queryObject.jobType = jobType }
+  if (search) {
+    queryObject.position = { $regex: search, $options: 'i' }
+  }
+
+  let result = Job.find(queryObject)
+
+  // Sorting
+  if (sort === 'latest') { result = result.sort('-createdAt') }
+  if (sort === 'oldest') { result = result.sort('createdAt') }
+  if (sort === 'a-z') { result = result.sort('position') }
+  if (sort === 'z-a') { result = result.sort('-position') }
+
+  const jobs = await result
   res.status(StatusCodes.OK).json({ jobs, totalJobs: jobs.length, numOfPages: 1 })
 }
 const createJob = async (req, res) => {
