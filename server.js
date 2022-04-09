@@ -24,10 +24,10 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan('dev'))
 }
 app.use(express.json())
-app.use(cors)
 app.use(helmet())
 app.use(xss())
 app.use(mongoSanitize())
+app.use(cors())
 
 // Routes
 // app.get('/', (req, res) => { res.send("HOLA") })
