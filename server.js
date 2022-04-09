@@ -3,6 +3,9 @@ import dotenv from 'dotenv'
 import connectDB from './db/connect.js'
 import 'express-async-errors'
 import morgan from 'morgan'
+import helmet from 'helmet'
+import xss from 'xss-clean'
+import mongoSanitize from 'express-mongo-sanitize'
 // Routers Imports
 import authRouter from './routes/authRoutes.js'
 import jobsRouter from './routes/jobsRoutes.js'
@@ -20,9 +23,12 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan('dev'))
 }
 app.use(express.json())
+app.use(helmet())
+app.use(xss())
+app.use(mongoSanitize())
 
 // Routes
-app.get('/', (req, res) => { res.send("HOLA") })
+// app.get('/', (req, res) => { res.send("HOLA") })
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/jobs', authenticateUser, jobsRouter)
