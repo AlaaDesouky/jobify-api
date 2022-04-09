@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import helmet from 'helmet'
 import xss from 'xss-clean'
 import mongoSanitize from 'express-mongo-sanitize'
+import cors from 'cors'
 // Routers Imports
 import authRouter from './routes/authRoutes.js'
 import jobsRouter from './routes/jobsRoutes.js'
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan('dev'))
 }
 app.use(express.json())
+app.use(cors)
 app.use(helmet())
 app.use(xss())
 app.use(mongoSanitize())
